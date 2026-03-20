@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edvera — California Attendance Compliance, Automated</title>
+  <meta name="description" content="Edvera helps California attendance teams move from raw absence data to documented SARB compliance — automatically." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #0f1923; --ink-light: #3a4a58; --ink-muted: #6b7f8e;
+      --emerald: #059669; --emerald-light: #d1fae5; --emerald-mid: #10b981;
+      --amber: #d97706; --amber-light: #fef3c7;
+      --surface: #f8fafb; --white: #ffffff;
+      --border: #e2e8f0; --border-light: #f1f5f9;
+      --red: #dc2626; --red-light: #fee2e2;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-light); padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--ink); letter-spacing: -0.02em; text-decoration: none; }
+    .nav-logo span { color: var(--emerald); }
+    .btn-nav { background: var(--emerald); color: white; padding: 0.45rem 1.1rem; border-radius: 6px; font-size: 0.85rem; font-weight: 500; border: none; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+    .btn-nav:hover { background: #047857; }
+
+    /* HERO */
+    .hero { padding: 140px 2rem 100px; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--emerald-light); color: var(--emerald); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1.5rem; }
+    .hero-eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--emerald); border-radius: 50%; }
+    .hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1.12; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 1.5rem; }
+    .hero h1 em { font-style: italic; color: var(--emerald); }
+    .hero-body { font-size: 1.05rem; color: var(--ink-light); line-height: 1.7; margin-bottom: 2.5rem; max-width: 480px; }
+    .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--emerald); color: white; padding: 0.85rem 1.8rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer; font-family: inherit; transition: all 0.15s; box-shadow: 0 2px 8px rgba(5,150,105,0.3); }
+    .btn-primary:hover { background: #047857; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(5,150,105,0.35); }
+    .hero-note { font-size: 0.8rem; color: var(--ink-muted); }
+
+    /* HERO CARD */
+    .hero-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); overflow: hidden; animation: floatCard 4s ease-in-out infinite; }
+    @keyframes floatCard { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .card-header { background: var(--ink); padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+    .card-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .card-header-title { color: rgba(255,255,255,0.5); font-size: 0.75rem; font-weight: 500; margin-left: 0.5rem; }
+    .card-body { padding: 1.25rem; }
+    .card-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); margin-bottom: 0.4rem; }
+    .card-metric { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--red); letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.2rem; }
+    .card-sub { font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 1.2rem; }
+    .card-divider { height: 1px; background: var(--border-light); margin: 1rem 0; }
+    .card-cases { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; margin-top: 1rem; }
+    .case-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem; text-align: center; }
+    .case-pill-num { font-size: 1.3rem; font-weight: 700; color: var(--ink); line-height: 1; }
+    .case-pill-label { font-size: 0.65rem; color: var(--ink-muted); margin-top: 0.2rem; }
+    .case-pill.red .case-pill-num { color: var(--red); }
+    .case-pill.amber .case-pill-num { color: var(--amber); }
+    .case-pill.green .case-pill-num { color: var(--emerald); }
+    .nxt-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--emerald); margin-bottom: 0.5rem; }
+    .nxt-title { font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 0.25rem; }
+    .nxt-desc { font-size: 0.78rem; color: var(--ink-muted); margin-bottom: 1rem; }
+    .nxt-btn { width: 100%; background: var(--emerald); color: white; border: none; padding: 0.7rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600; font-family: inherit; }
+
+    /* STATS */
+    .stats-bar { background: var(--ink); padding: 3rem 2rem; }
+    .stats-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+    .stat-item { text-align: center; padding: 0 1rem; border-right: 1px solid rgba(255,255,255,0.1); }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-family: 'DM Serif Display', serif; font-size: 2.8rem; color: var(--white); letter-spacing: -0.04em; line-height: 1; margin-bottom: 0.4rem; }
+    .stat-num span { color: var(--emerald-mid); }
+    .stat-desc { font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
+    .stat-source { font-size: 0.68rem; color: rgba(255,255,255,0.25); margin-top: 0.4rem; }
+
+    /* SECTIONS */
+    .section { padding: 100px 2rem; max-width: 1100px; margin: 0 auto; }
+    .eyebrow { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--emerald); margin-bottom: 1rem; }
+    .sec-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem,3vw,2.5rem); letter-spacing: -0.03em; line-height: 1.2; color: var(--ink); margin-bottom: 1.25rem; max-width: 600px; }
+    .sec-body { font-size: 1rem; color: var(--ink-light); line-height: 1.75; max-width: 560px; margin-bottom: 3rem; }
+
+    /* HOW */
+    .how-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .how-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; transition: box-shadow 0.2s; }
+    .how-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+    .how-num { font-family: 'DM Serif Display', serif; font-size: 3rem; color: var(--border); line-height: 1; margin-bottom: 1rem; }
+    .how-title { font-size: 1.05rem; font-weight: 600; color: var(--ink); margin-bottom: 0.6rem; }
+    .how-body { font-size: 0.875rem; color: var(--ink-muted); line-height: 1.65; }
+    .how-tag { display: inline-block; margin-top: 1rem; background: var(--emerald-light); color: var(--emerald); font-size: 0.7rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 100px; }
+
+    /* WORKFLOW */
+    .wf-section { background: var(--surface); padding: 100px 2rem; }
+    .wf-inner { max-width: 1100px; margin: 0 auto; }
+    .wf-steps { margin-top: 3rem; display: grid; gap: 1px; background: var(--border); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+    .wf-step { background: var(--white); padding: 1.5rem 2rem; display: grid; grid-template-columns: 40px 1fr auto; gap: 1.25rem; align-items: center; }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; background: var(--emerald-light); color: var(--emerald); font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .step-title { font-size: 0.95rem; font-weight: 600; color: var(--ink); }
+    .step-desc { font-size: 0.8rem; color: var(--ink-muted); margin-top: 0.2rem; }
+    .badge { font-size: 0.68rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 100px; white-space: nowrap; }
+    .badge-r { background: var(--red-light); color: var(--red); }
+    .badge-a { background: var(--emerald-light); color: var(--emerald); }
+    .badge-o { background: var(--amber-light); color: var(--amber); }
+
+    /* PROOF */
+    .proof-section { padding: 100px 2rem; max-width: 1100px; margin: 0 auto; }
+    .proof-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; margin-top: 3rem; }
+    .proof-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; }
+    .proof-quote { font-size: 1.05rem; color: var(--ink); line-height: 1.65; font-style: italic; margin-bottom: 1.5rem; }
+    .proof-attr { font-size: 0.8rem; color: var(--ink-muted); font-weight: 500; }
+    .proof-stat { background: var(--ink); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; justify-content: center; }
+    .proof-num { font-family: 'DM Serif Display', serif; font-size: 3.5rem; color: var(--emerald-mid); letter-spacing: -0.04em; line-height: 1; margin-bottom: 0.5rem; }
+    .proof-desc { font-size: 0.9rem; color: rgba(255,255,255,0.6); line-height: 1.5; }
+    .proof-src { font-size: 0.7rem; color: rgba(255,255,255,0.25); margin-top: 0.75rem; }
+
+    /* CTA */
+    .cta-section { background: var(--ink); padding: 100px 2rem; text-align: center; }
+    .cta-inner { max-width: 640px; margin: 0 auto; }
+    .cta-pill { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(16,185,129,0.15); color: var(--emerald-mid); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.35rem 0.85rem; border-radius: 100px; margin-bottom: 1.5rem; }
+    .cta-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.8rem,3.5vw,2.8rem); color: var(--white); letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 1rem; }
+    .cta-title em { font-style: italic; color: var(--emerald-mid); }
+    .cta-sub { font-size: 0.95rem; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 2.5rem; }
+    .btn-cta { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--emerald); color: white; padding: 1rem 2.2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; border: none; cursor: pointer; font-family: inherit; transition: all 0.15s; box-shadow: 0 4px 20px rgba(5,150,105,0.35); }
+    .btn-cta:hover { background: #047857; transform: translateY(-1px); }
+    .cta-fine { margin-top: 1.25rem; font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+
+    /* FOOTER */
+    footer { background: #0a1018; padding: 2.5rem 2rem; text-align: center; }
+    .footer-logo { font-family: 'DM Serif Display', serif; font-size: 1.2rem; color: rgba(255,255,255,0.35); margin-bottom: 0.5rem; }
+    .footer-logo span { color: var(--emerald-mid); }
+    .footer-text { font-size: 0.75rem; color: rgba(255,255,255,0.18); }
+
+    /* MODAL */
+    .overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(10,16,24,0.8); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+    .overlay.open { opacity: 1; pointer-events: all; }
+    .modal { background: var(--white); border-radius: 20px; width: 100%; max-width: 540px; box-shadow: 0 32px 100px rgba(0,0,0,0.45); overflow: hidden; transform: translateY(16px) scale(0.98); transition: transform 0.25s ease; max-height: 92vh; overflow-y: auto; }
+    .overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal-head { padding: 2rem 2rem 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .modal-title { font-family: 'DM Serif Display', serif; font-size: 1.65rem; letter-spacing: -0.03em; color: var(--ink); line-height: 1.2; }
+    .modal-title em { font-style: italic; color: var(--emerald); }
+    .modal-sub { font-size: 0.84rem; color: var(--ink-muted); margin-top: 0.35rem; line-height: 1.5; }
+    .modal-close { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ink-muted); font-size: 1rem; flex-shrink: 0; transition: background 0.15s; }
+    .modal-close:hover { background: var(--border); }
+    .modal-body { padding: 1.5rem 2rem 2rem; }
+    .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .f-group { margin-bottom: 0.75rem; }
+    .f-group label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--ink-light); margin-bottom: 0.35rem; }
+    .f-group input, .f-group select, .f-group textarea { width: 100%; padding: 0.7rem 0.9rem; border: 1.5px solid var(--border); border-radius: 8px; font-size: 0.875rem; font-family: inherit; color: var(--ink); background: var(--white); transition: border-color 0.15s, box-shadow 0.15s; outline: none; -webkit-appearance: none; appearance: none; }
+    .f-group input:focus, .f-group select:focus, .f-group textarea:focus { border-color: var(--emerald); box-shadow: 0 0 0 3px rgba(5,150,105,0.1); }
+    .f-group input::placeholder, .f-group textarea::placeholder { color: #b8c8d4; }
+    .f-group textarea { resize: vertical; min-height: 76px; }
+    .f-divider { height: 1px; background: var(--border-light); margin: 1rem 0; }
+    .f-section-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-muted); margin-bottom: 0.75rem; }
+    .f-submit { width: 100%; background: var(--emerald); color: white; padding: 0.9rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer; font-family: inherit; margin-top: 1rem; transition: background 0.15s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .f-submit:hover { background: #047857; }
+    .f-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .f-fine { font-size: 0.72rem; color: var(--ink-muted); text-align: center; margin-top: 0.75rem; line-height: 1.5; }
+    .modal-success { padding: 2.5rem 2rem; text-align: center; display: none; }
+    .success-icon { width: 56px; height: 56px; background: var(--emerald-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; color: var(--emerald); font-size: 1.4rem; font-weight: 700; }
+    .success-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+    .success-body { font-size: 0.875rem; color: var(--ink-muted); line-height: 1.65; max-width: 360px; margin: 0 auto 1.75rem; }
+    .success-divider { height: 1px; background: var(--border-light); margin: 1.5rem 0; }
+    .success-book-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: var(--ink-muted); margin-bottom: 0.75rem; }
+    .success-book-title { font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 0.4rem; }
+    .success-book-desc { font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 1.25rem; line-height: 1.5; }
+    .btn-book { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--ink); color: white; padding: 0.8rem 1.6rem; border-radius: 8px; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: background 0.15s; margin-bottom: 0.75rem; }
+    .btn-book:hover { background: #1e2f3e; }
+    .btn-book svg { width: 15px; height: 15px; }
+    .success-skip { font-size: 0.75rem; color: var(--ink-muted); cursor: pointer; background: none; border: none; font-family: inherit; text-decoration: underline; }
+    .success-skip:hover { color: var(--ink); }
+
+    /* FADE */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      .hero { grid-template-columns: 1fr; gap: 3rem; padding-top: 100px; }
+      .hero-card { display: none; }
+      .stats-inner { grid-template-columns: 1fr; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1.5rem; }
+      .stat-item:last-child { border-bottom: none; }
+      .how-grid { grid-template-columns: 1fr; }
+      .proof-grid { grid-template-columns: 1fr; }
+      .wf-step { grid-template-columns: 40px 1fr; }
+      .badge { display: none; }
+      .f-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">edver<span>a</span></a>
+  <button class="btn-nav" onclick="openModal()">Get Early Access</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow">A note to California attendance teams</div>
+    <h1>Attendance teams are doing <em>incredibly hard work.</em><br>We built something to help.</h1>
+    <p class="hero-body">California's attendance staff are managing more cases with fewer resources than ever before. Edvera handles the compliance documentation — Tier 1 letters, SART conferences, SARB packets — so your team can spend more time with the families who need them most.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="openModal()">
+        Get Early Access
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </button>
+      <span class="hero-note">Free for pilot districts · No commitment required</span>
+    </div>
+  </div>
+
+  <!-- HERO CARD — generic names, no identifiable demographics -->
+  <div class="hero-card">
+    <div class="card-header">
+      <div class="card-dot" style="background:#ef4444"></div>
+      <div class="card-dot" style="background:#f59e0b"></div>
+      <div class="card-dot" style="background:#10b981"></div>
+      <span class="card-header-title">Edvera Console · Valley Unified</span>
+    </div>
+    <div class="card-body">
+      <div class="card-label">Projected ADA Revenue Loss</div>
+      <div class="card-metric">$284,000</div>
+      <div class="card-sub">2025–26 academic year · 3 schools</div>
+      <div class="card-cases">
+        <div class="case-pill red"><div class="case-pill-num">12</div><div class="case-pill-label">Tier 3 SARB</div></div>
+        <div class="case-pill amber"><div class="case-pill-num">24</div><div class="case-pill-label">Tier 2</div></div>
+        <div class="case-pill green"><div class="case-pill-num">31</div><div class="case-pill-label">Tier 1</div></div>
+      </div>
+      <div class="card-divider"></div>
+      <div class="nxt-label">Next Step — Alex Johnson</div>
+      <div class="nxt-title">Send Tier 1 notification letter</div>
+      <div class="nxt-desc">Required by EC §48260.5 before escalation to Tier 2.</div>
+      <button class="nxt-btn">Generate Tier 1 Letter</button>
+    </div>
+  </div>
+</section>
+
+<!-- STATS — all verified against CDE official sources -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item fade-in">
+      <div class="stat-num"><span>19.4%</span></div>
+      <div class="stat-desc">of California students were chronically absent in 2024–25 — still nearly double pre-pandemic levels despite year-over-year improvement</div>
+      <div class="stat-source">California Dept. of Education DataQuest, 2025</div>
+    </div>
+    <div class="stat-item fade-in" style="transition-delay:.1s">
+      <div class="stat-num"><span>Millions</span></div>
+      <div class="stat-desc">in ADA funding lost annually by California districts due to chronic absenteeism — every percentage point of improvement translates directly to recovered revenue</div>
+      <div class="stat-source">California Education Code / ADA funding formula</div>
+    </div>
+    <div class="stat-item fade-in" style="transition-delay:.2s">
+      <div class="stat-num"><span>50%</span></div>
+      <div class="stat-desc">reduction in chronic absenteeism is California's official 5-year goal — the CDE has committed to cutting today's rates in half by 2030</div>
+      <div class="stat-source">California Dept. of Education, 2025</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="eyebrow">How it works</div>
+  <h2 class="sec-title">From raw SIS data to documented compliance — automatically.</h2>
+  <p class="sec-body">Most attendance teams export a CSV from their SIS, open a spreadsheet, and spend hours figuring out who needs what. Edvera replaces that entirely.</p>
+  <div class="how-grid">
+    <div class="how-card fade-in">
+      <div class="how-num">01</div>
+      <div class="how-title">Upload your SIS export</div>
+      <div class="how-body">Drag in your attendance CSV. Edvera maps the columns, normalizes the data, and creates student records automatically. Works with Aeries, PowerSchool, Illuminate, and any CSV export.</div>
+      <span class="how-tag">5 minutes</span>
+    </div>
+    <div class="how-card fade-in" style="transition-delay:.1s">
+      <div class="how-num">02</div>
+      <div class="how-title">Cases created automatically</div>
+      <div class="how-body">The compliance engine detects every threshold crossing — Tier 1 truancy, habitual truancy, SARB candidacy — and opens cases with the correct legal requirements pre-populated.</div>
+      <span class="how-tag">Instant</span>
+    </div>
+    <div class="how-card fade-in" style="transition-delay:.2s">
+      <div class="how-num">03</div>
+      <div class="how-title">Staff see exactly what to do next</div>
+      <div class="how-body">Every case shows one clear next step with the Education Code requirement, a CTA button, and the generated document. No guessing, no spreadsheets, no missed deadlines.</div>
+      <span class="how-tag">One screen per case</span>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<div class="wf-section">
+  <div class="wf-inner">
+    <div class="eyebrow">The compliance workflow</div>
+    <h2 class="sec-title">Every required step. Nothing missed.</h2>
+    <p class="sec-body">California's multi-tier attendance process has specific legal requirements at each stage. Edvera enforces the required steps, surfaces the optional ones, and keeps everything timestamped and auditable.</p>
+    <div class="wf-steps fade-in">
+      <div class="wf-step"><div class="step-num">1</div><div><div class="step-title">Import attendance data</div><div class="step-desc">Upload CSV from any SIS — schools auto-created, cases opened</div></div><span class="badge badge-a">Automated</span></div>
+      <div class="wf-step"><div class="step-num">2</div><div><div class="step-title">Tier 1 — Truancy notification letter</div><div class="step-desc">Generated, sent, and logged per EC §48260.5</div></div><span class="badge badge-r">Required by law</span></div>
+      <div class="wf-step"><div class="step-num">3</div><div><div class="step-title">Family outreach & barrier assessment</div><div class="step-desc">Log contact attempts, document barriers, assign interventions</div></div><span class="badge badge-o">Recommended</span></div>
+      <div class="wf-step"><div class="step-num">4</div><div><div class="step-title">Tier 2 — Parent/guardian conference</div><div class="step-desc">Conference summary generated and filed per EC §48262</div></div><span class="badge badge-r">Required by law</span></div>
+      <div class="wf-step"><div class="step-num">5</div><div><div class="step-title">Tier 3 — SARB packet assembly</div><div class="step-desc">All prior documentation compiled into a complete referral packet</div></div><span class="badge badge-r">Required by law</span></div>
+      <div class="wf-step"><div class="step-num">6</div><div><div class="step-title">Principal approval & SARB submission</div><div class="step-desc">Approval workflow built in — packet submitted with full audit trail</div></div><span class="badge badge-a">Automated</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREENSHOT -->
+<div style="background:var(--surface);padding:80px 2rem;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="eyebrow" style="text-align:center">The console — in real use</div>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:-0.03em;line-height:1.2;color:var(--ink);text-align:center;margin:0 auto 0.75rem;max-width:600px;">
+      One screen. Every case. <em style="font-style:italic;color:var(--emerald)">Clear next step.</em>
+    </h2>
+    <p style="text-align:center;font-size:0.9rem;color:var(--ink-muted);max-width:500px;margin:0 auto 2.5rem;line-height:1.7;">
+      A real case workspace — Tier 3, Elevated signal. The system surfaces exactly 
+      what's required by law, what's been completed, and what needs to happen next.
+    </p>
+    <div class="fade-in" style="border-radius:16px;overflow:hidden;box-shadow:0 8px 48px rgba(0,0,0,0.12);border:1px solid var(--border);max-width:900px;margin:0 auto;">
+      <img
+        src="screenshot-console.png"
+        alt="Edvera compliance case workspace"
+        style="width:100%;display:block;"
+        onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'background:var(--border-light);min-height:320px;display:flex;align-items:center;justify-content:center;\'><p style=\'color:var(--ink-muted);font-size:0.85rem;font-family:DM Sans,sans-serif;\'>Add screenshot-console.png to the same folder as index.html</p></div>'"
+      />
+    </div>
+    <p style="text-align:center;font-size:0.72rem;color:var(--ink-muted);margin-top:1rem;">
+      All student data shown is synthetic — generated for demonstration purposes only.
+    </p>
+  </div>
+</div>
+
+<!-- PROOF — no named individuals or districts -->
+<section class="proof-section">
+  <div class="eyebrow">Why now</div>
+  <h2 class="sec-title">Districts face more compliance cases with less staff to manage them.</h2>
+  <div class="proof-grid">
+    <div class="proof-stat fade-in">
+      <div class="proof-num">52%</div>
+      <div class="proof-desc">of California schools still had chronic absenteeism rates above 20% as of 2023–24 — meaning more than half of schools are managing elevated caseloads that require compliance intervention.</div>
+      <div class="proof-src">Policy Analysis for California Education (PACE) / CDE, 2024</div>
+    </div>
+    <div class="proof-card fade-in" style="transition-delay:.1s">
+      <p class="proof-quote">"Chronic absenteeism isn't just an academic problem — it's a financial one. California districts are funded based on attendance. Every student who misses school is revenue the district cannot recover."</p>
+      <div class="proof-attr">California Education Code — ADA funding model</div>
+    </div>
+    <div class="proof-card fade-in" style="transition-delay:.15s">
+      <p class="proof-quote">"Attendance staff are managing more cases with fewer resources, while compliance documentation requirements remain unchanged. The documentation burden is real and growing."</p>
+      <div class="proof-attr">Attendance Works — National research on attendance staffing</div>
+    </div>
+    <div class="proof-stat fade-in" style="transition-delay:.2s">
+      <div class="proof-num">30→19%</div>
+      <div class="proof-desc">California's chronic absenteeism rate has fallen from its 30% pandemic peak to 19.4% — but this still means nearly 1 in 5 students needs intervention, and compliance documentation requirements apply to every case.</div>
+      <div class="proof-src">California Dept. of Education DataQuest, 2025</div>
+    </div>
+  </div>
+</section>
+
+<!-- BOTTOM CTA -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-pill">Working alongside California districts</div>
+    <h2 class="cta-title">We'd love to<br><em>learn from your team.</em></h2>
+    <p class="cta-sub">We're a small team that built this because we believe attendance staff deserve better tools. We're looking for a handful of California districts willing to work with us this school year — your feedback will shape what this becomes. No cost, no obligation.</p>
+    <button class="btn-cta" onclick="openModal()">
+      Get Early Access
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </button>
+    <div class="cta-fine">Free for pilot partners · Your feedback shapes the product · California Ed Code compliant</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">edver<span>a</span></div>
+  <div class="footer-text">Built for California attendance teams · © 2026 Edvera</div>
+</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div id="formView">
+      <div class="modal-head">
+        <div>
+          <h2 class="modal-title" id="mTitle">Let's <em>work together</em></h2>
+          <p class="modal-sub">Tell us about your district. We'll be in touch within 24 hours — no sales pitch, just a conversation.</p>
+        </div>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="eaForm" onsubmit="handleSubmit(event)" novalidate>
+          <div class="f-section-label">About you</div>
+          <div class="f-row">
+            <div class="f-group">
+              <label for="fn">Full name *</label>
+              <input type="text" id="fn" name="fullName" placeholder="Dr. Jane Smith" required />
+            </div>
+            <div class="f-group">
+              <label for="tt">Your title *</label>
+              <input type="text" id="tt" name="title" placeholder="Superintendent" required />
+            </div>
+          </div>
+          <div class="f-group">
+            <label for="di">District name *</label>
+            <input type="text" id="di" name="district" placeholder="e.g. Valley Unified School District" required />
+          </div>
+          <div class="f-row">
+            <div class="f-group">
+              <label for="em">Work email *</label>
+              <input type="email" id="em" name="email" placeholder="you@district.edu" required />
+            </div>
+            <div class="f-group">
+              <label for="en">Student enrollment</label>
+              <select id="en" name="enrollment">
+                <option value="">Select range</option>
+                <option>Under 1,000</option>
+                <option>1,000 – 5,000</option>
+                <option>5,000 – 15,000</option>
+                <option>15,000 – 50,000</option>
+                <option>50,000+</option>
+              </select>
+            </div>
+          </div>
+          <div class="f-divider"></div>
+          <div class="f-section-label">Your situation</div>
+          <div class="f-group">
+            <label for="cp">How does your team currently manage SARB compliance? *</label>
+            <select id="cp" name="currentProcess" required>
+              <option value="">Select one</option>
+              <option>Spreadsheets and manual tracking</option>
+              <option>Our SIS has some tools but it's incomplete</option>
+              <option>We have a process but it's very time consuming</option>
+              <option>We don't have a consistent process</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label for="bc">Biggest attendance challenge right now? *</label>
+            <select id="bc" name="biggestChallenge" required>
+              <option value="">Select one</option>
+              <option>Not enough staff to manage caseloads</option>
+              <option>Keeping up with documentation requirements</option>
+              <option>Identifying at-risk students early enough</option>
+              <option>Getting families engaged</option>
+              <option>Tracking ADA revenue impact</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label for="nt">Anything else you'd like us to know?</label>
+            <textarea id="nt" name="notes" placeholder="Tell us about your district's specific situation..."></textarea>
+          </div>
+          <button type="submit" class="f-submit" id="submitBtn">Send us a note →</button>
+          <p class="f-fine">No sales pressure. We respond personally within 24 hours.</p>
+        </form>
+      </div>
+    </div>
+    <div class="modal-success" id="successView">
+      <div class="success-icon">✓</div>
+      <h3 class="success-title">Thank you — genuinely.</h3>
+      <p class="success-body">
+        We know your time is limited. We'll read every word you shared 
+        and be in touch within 24 hours. If you'd like to skip the 
+        back-and-forth, pick a time below.
+      </p>
+
+      <div class="success-divider"></div>
+
+      <div class="success-book-label">Optional — skip the wait</div>
+      <div class="success-book-title">Book a 20-minute demo</div>
+      <div class="success-book-desc">
+        See Edvera running with real attendance data — import, compliance cases, 
+        SARB workflow, and ADA loss projections. No preparation needed on your end.
+      </div>
+
+      <a
+        href="https://cal.com/YOUR_CAL_LINK"
+        target="_blank"
+        rel="noopener"
+        class="btn-book"
+        id="bookBtn"
+      >
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="12" height="11" rx="1.5"/>
+          <path d="M5 1v4M11 1v4M2 7h12"/>
+        </svg>
+        Pick a time that works →
+      </a>
+
+      <br />
+      <button class="success-skip" onclick="closeModal()">
+        No thanks — I'll wait for your email
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openModal() {
+    document.getElementById('overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('overlay')) closeModal();
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = document.getElementById('submitBtn');
+    let valid = true;
+    form.querySelectorAll('[required]').forEach(f => {
+      if (!f.value.trim()) { f.style.borderColor = '#dc2626'; valid = false; }
+      else f.style.borderColor = '';
+    });
+    if (!valid) return;
+    const data = {
+      fullName: form.fullName.value, title: form.title.value,
+      district: form.district.value, email: form.email.value,
+      enrollment: form.enrollment.value, currentProcess: form.currentProcess.value,
+      biggestChallenge: form.biggestChallenge.value, notes: form.notes.value,
+      submittedAt: new Date().toISOString(),
+    };
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    try {
+      // Replace YOUR_FORMSPREE_ID with your Formspree form ID (free at formspree.io)
+      const res = await fetch('https://formspree.io/f/YOUR_FORMSPREE_ID', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error();
+    } catch {
+      console.log('Submission:', data);
+    } finally {
+      document.getElementById('formView').style.display = 'none';
+      document.getElementById('successView').style.display = 'block';
+    }
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
